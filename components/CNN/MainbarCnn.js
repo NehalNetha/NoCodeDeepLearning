@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function MainbarCNN({ selectedLayers, removeLayer, addConvLayer }) {
+function MainbarCNN({ selectedLayers, removeLayer, addConvLayer, toggleDropdownConv, addFullyConnectedLayer }) {
     const [expandedBlockIndex, setExpandedBlockIndex] = useState(null);
 
   const Blocks = ({ block, index }) => {
@@ -16,11 +16,19 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer }) {
             setExpandedBlockIndex(prev => prev === index ? null : index);
         }
     };
+
+
+
     return (
       <div className="relative">
         <div
           className="w-[16rem] h-[3.5rem] mb-5 py-5 px-2 border-[1px] border-gray-500 rounded-lg items-center flex flex-row justify-between cursor-pointer"
-          onClick={expandBlock}
+          onClick={() => {
+            expandBlock();
+            if (block === "Conv Layer") {
+              toggleDropdownConv(block);
+            }
+          }}
         >
           <p className="text-white text-[16px] pl-4">{block}</p>
           <button className="cursor-pointer" onClick={(e) => { e.stopPropagation(); selectOptionToggle(); }}>            
@@ -31,14 +39,22 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer }) {
         </div>
 
         {selectedOptions && (
-          <div className="absolute top-0 -right-14 ml-11 mt-2 flex flex-col gap-2 bg-gray-800 p-2 rounded-lg">
+          <div className="absolute -top-3 -right-14 ml-11 mt-2 flex flex-col gap-2 bg-gray-800 p-2 rounded-lg">
             <button onClick={() => removeLayer(block)}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="red" className="size-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
             </button>
-            {block === "Conv Block" && (
-              <button onClick={addConvLayer}>
+            {["Conv Block" , "Fully Connected Layer" ].includes(block) && (
+              <button 
+                onClick={() => {
+                    if (block === "Conv Block") {
+                      addConvLayer();
+                    } else if (block === "Fully Connected Layer") {
+                      addFullyConnectedLayer();
+                    }
+                }}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="green" className="size-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
@@ -50,11 +66,11 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer }) {
     );
   };
 
-  const ConvBlockExpanded = () => (
+  const ConvBlockExpanded = ({block, toggleDropdownConv}) => (
     <div className="absolute left-[21rem] top-17 flex flex-col gap-2">
-      <Blocks block="Conv Layer" />
-      <Blocks block="Activation Function" />
-      <Blocks block="Pooling Layer" />
+      <Blocks block="Conv Layer" toggleDropdownConv={toggleDropdownConv}/>
+      <Blocks block="Activation Function"   onClick={() => toggleDropdownConv(block)} />
+      <Blocks block="Pooling Layer"   onClick={() => toggleDropdownConv(block)} />
     </div>
   );
 
@@ -78,7 +94,7 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer }) {
                 }
             </div>
 
-              {expandedBlockIndex === index &&   <ConvBlockExpanded />}
+              {expandedBlockIndex === index &&   <ConvBlockExpanded block= {block} toggleDropdownConv={toggleDropdownConv}  />}
 
               {index < selectedLayers.length - 1 && (
                 <svg className="w-8 h-8 my-2 mb-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

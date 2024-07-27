@@ -9,18 +9,31 @@ import {
 import InputLayerCNN from './Inputs/InputLayerCnn';
 import ConvLayerCNN from './Inputs/ConvLayerInput';
 import ConvLayerInput from './Inputs/ConvLayerInput';
+import FullyConnectedLayer from './Inputs/FullyConnectedLayer';
 
 
-function RightBarCnn({selectedLayers, InputParamApply, ConvParamApply}) {
+function RightBarCnn({selectedLayers, InputParamApply, ConvParamApply, dropdownState, FullyConnectedLayerParamApply, ActivationParamApply , PoolingParamApply}) {
 
 
    
  
+  
   const [activeApply, setActiveApply] = useState(null)
+  const [activeFCN, setActiveFCN] = useState(0);
 
-  const toggleApply = (type) => {
+
+  const toggleApply = (type, index) => {
       setActiveApply(type)
+      if (type.startsWith('Fully Connected Layer')) {
+        setActiveFCN(index);
+      }
   }
+
+  const getFCNNumber = (layers, currentIndex) => {
+    return layers.slice(0, currentIndex + 1).filter(layer => layer.startsWith('Fully Connected Layer')).length;
+  };
+
+       
 
   return (
     <div className="w-[22rem] min-h-screen  bg-gray-900 border-l-[1px] border-gray-40 pb-9">
@@ -32,11 +45,14 @@ function RightBarCnn({selectedLayers, InputParamApply, ConvParamApply}) {
                       <CarouselItem key={`${layer}-${index}`} className="md:basis-1/2 lg:basis-1/3">
                         <div className="pl-3 pt-7 pb-3">
                           <button
-                             className={`text-sm ${activeApply == layer ? "text-[#F6E6CB]" : "text-gray-400"}`}
-                             onClick={() => toggleApply(layer)}
+                              className={`text-sm ${activeApply === (layer.startsWith('Fully Connected Layer') ? `${layer}-${index}` : layer) ? "text-[#F6E6CB]" : "text-gray-400"}`}
+                              onClick={() => toggleApply(layer.startsWith('Fully Connected Layer') ? `${layer}-${index}` : layer, index)}
+
                           >
-                          <p className="text-sm">
-                              {layer}
+                            <p className="text-sm">
+                              {layer.startsWith('Fully Connected Layer') 
+                                ? `${layer} ${getFCNNumber(selectedLayers, index)}` 
+                                : layer}
                             </p>
                           </button>
                         </div>
@@ -48,7 +64,15 @@ function RightBarCnn({selectedLayers, InputParamApply, ConvParamApply}) {
 
         <div>
           {activeApply === "Input Layer" && <InputLayerCNN InputParamApply={InputParamApply} />}
-          {activeApply === "Conv Layer" && <ConvLayerInput ConvParamApply={ConvParamApply} />}
+          {activeApply === "Conv Layer" && <ConvLayerInput ConvParamApply={ConvParamApply}  dropdownState={dropdownState} ActivationParamApply={ActivationParamApply} PoolingParamApply={PoolingParamApply}/>}
+          {activeApply === "Fully Connected Layer" && <FullyConnectedLayer />}
+
+          {activeApply && activeApply.startsWith('Fully Connected Layer') && (
+            <FullyConnectedLayer
+              FullyConnectedLayerParamApply={( in_features, out_features, bias) => FullyConnectedLayerParamApply(in_features, out_features, bias)}
+              layerIndex={activeFCN}
+            />
+          )}
         </div>
 
     </div>

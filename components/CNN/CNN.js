@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 
 function CNN({onSelectedLayers, selectedLayers}) {
 
-    const buildingBlock = ["Input Layer", "Conv Layer", "Flatten Layer", "Dense Layer", "Output Layer"]
+    const buildingBlock = ["Input Layer", "Conv Layer", "Flatten Layer", "Fully Connected Layer", "Output Layer"]
 
     const Blocks = ({block, onSelectedLayers}) => {
         

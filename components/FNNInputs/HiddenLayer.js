@@ -14,9 +14,9 @@ const HiddenLayer = ({HiddenParamApply, layerIndex }) => {
             <div className="flex flex-col gap-3">
                 <label
                     htmlFor="floating_hidden_size"
-                    className="text-[10px] text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:start-0 peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    className="text-[16px] text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:start-0 peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
-                    Hidden Layer { layerIndex + 1}
+                    Hidden Layer { layerIndex }
                 </label>
                 <input
                     type="text"

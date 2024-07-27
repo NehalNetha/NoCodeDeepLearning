@@ -18,7 +18,7 @@ export default function NeuralNetCNN() {
     convLayers: [],
     activationLayers: [],
     poolingLayers: [],
-    denseLayers: [],
+    FullyConnectedLayer: [],
     outputLayer: { units: 0, activation: "" },
     optimizer: "",
     lossFunction: ""
@@ -34,9 +34,9 @@ export default function NeuralNetCNN() {
           return [...prev, layer];
         } else if (layer === "Flatten Layer" && prev.includes("Conv Layer") && !prev.includes("Flatten Layer")) {
           return [...prev, layer];
-        } else if (layer === "Dense Layer" && prev.includes("Flatten Layer") && !prev.includes("Output Layer")) {
+        } else if (layer === "Fully Connected Layer" && prev.includes("Flatten Layer") && !prev.includes("Output Layer")) {
           return [...prev, layer];
-        } else if (layer === "Output Layer" && prev.includes("Dense Layer") && !prev.includes("Output Layer")) {
+        } else if (layer === "Output Layer" && prev.includes("Fully Connected Layer") && !prev.includes("Output Layer")) {
           return [...prev, layer];
         } else {
           console.log(`Cannot add ${layer} at this position`);
@@ -52,7 +52,9 @@ export default function NeuralNetCNN() {
       const newModel = { ...prevModel };
       if (layerToRemove === "Conv Layer") {
         newModel.convLayers.pop();
-      } else if (layerToRemove === "Dense Layer") {
+      } else if (layerToRemove === "Fully Connected Layer") { 
+
+
         newModel.denseLayers.pop();
       } else if (layerToRemove === "Flatten Layer") {
         newModel.flattenLayer = {};
@@ -75,6 +77,19 @@ export default function NeuralNetCNN() {
    
   };
 
+  const addFullyConnectedLayer = () => {
+    setSelectedLayers((layers) => {
+      const lastConvLayerIndex = layers.lastIndexOf("Fully Connected Layer");
+      if (lastConvLayerIndex === -1) {
+        return [...layers, "Fully Connected Layer"];
+      } else {
+        const newLayers = [...layers];
+        newLayers.splice(lastConvLayerIndex + 1, 0, "Fully Connected Layer");
+        return newLayers;
+      }
+    });
+  }
+
   const InputParamApply = (width, height, channels, batchSize) => {
     setCNNModel(prevModel => ({
       ...prevModel,
@@ -82,11 +97,10 @@ export default function NeuralNetCNN() {
     }));
   };
 
-  const ConvParamApply = ( convParams) => {
+  const ConvParamApply = (convParams) => {
     setCNNModel(prevModel => {
       const newConvLayers = [...prevModel.convLayers];
-      const index = newConvLayers.length; 
-      newConvLayers[index] = { ...convParams };
+      newConvLayers.push({ ...convParams });
       
       return { 
         ...prevModel, 
@@ -95,11 +109,10 @@ export default function NeuralNetCNN() {
     });
   };
 
-  const ActivationParamApply = ( activation) => {
+  const ActivationParamApply = (activation) => {
     setCNNModel(prevModel => {
       const newActivationLayers = [...prevModel.activationLayers];
-      const index = newConvLayers.length; 
-      newActivationLayers[index] = activation;
+      newActivationLayers.push(activation);
       
       return { 
         ...prevModel, 
@@ -108,11 +121,10 @@ export default function NeuralNetCNN() {
     });
   };
 
-  const PoolingParamApply = ( poolParams) => {
+  const PoolingParamApply = (poolParams) => {
     setCNNModel(prevModel => {
       const newPoolingLayers = [...prevModel.poolingLayers];
-      const index = newConvLayers.length; 
-      newPoolingLayers[index] = { ...poolParams };
+      newPoolingLayers.push({ ...poolParams });
       
       return { 
         ...prevModel, 
@@ -122,11 +134,14 @@ export default function NeuralNetCNN() {
   };
 
 
-  const DenseParamApply = (index, units, activation) => {
-    setCNNModel(prevModel => {
-      const newDenseLayers = [...prevModel.denseLayers];
-      newDenseLayers[index] = { units, activation };
-      return { ...prevModel, denseLayers: newDenseLayers };
+  const FullyConnectedLayerParamApply = (in_features, out_features, bias) => {
+    setCNNModel(prevState => {
+      const newConnectedLayers = [...prevState.FullyConnectedLayer];
+      newConnectedLayers.push({ in_features, out_features, bias });
+      return {
+        ...prevState,
+        FullyConnectedLayer: newConnectedLayers
+      };
     });
   };
 
@@ -155,20 +170,47 @@ export default function NeuralNetCNN() {
     console.log(CNNModel);
   }, [CNNModel]);
 
+
+  //conv layer state press
+  const [dropdownStateConv, setDropdownStateConv] = useState({
+    isOpen: false,
+    isOpenActivation: false,
+    isOpenPooling: false
+  });
+  
+  const toggleDropdownConv = (type) => {
+    setDropdownStateConv(prevState => ({
+      isOpen: type === 'dropdown' ? !prevState.isOpen : false,
+      isOpenActivation: type === 'activation' ? !prevState.isOpenActivation : false,
+      isOpenPooling: type === 'pooling' ? !prevState.isOpenPooling : false
+    }));
+
+    console.log(dropdownStateConv)
+  };
+
   return (
     <div className="flex flex-row min-h-screen">
       <SidebarCnn onSelectedLayers={onSelectedLayers} selectedLayers={selectedLayers} />
-      <MainbarCNN selectedLayers={selectedLayers} removeLayer={removeLayer} addConvLayer={addConvLayer} />
+      <MainbarCNN 
+      selectedLayers={selectedLayers} 
+      removeLayer={removeLayer} 
+      addConvLayer={addConvLayer} 
+      toggleDropdownConv = {toggleDropdownConv}
+      addFullyConnectedLayer = {addFullyConnectedLayer}
+      
+      />
       <RightBarCnn 
         selectedLayers={selectedLayers}
         InputParamApply={InputParamApply}
         ConvParamApply={ConvParamApply}
-        ActivationParamApply={ActivationParamApply}
         PoolingParamApply={PoolingParamApply}
-        DenseParamApply={DenseParamApply}
+        FullyConnectedLayerParamApply={FullyConnectedLayerParamApply}
         OutputParamApply={OutputParamApply}
         OptimizerParamApply={OptimizerParamApply}
         LossFunctionParamApply={LossFunctionParamApply}
+        dropdownState = {dropdownStateConv}
+        toggleDropdownConv = {toggleDropdownConv}
+        ActivationParamApply = {ActivationParamApply}
       />
     </div>
   )
