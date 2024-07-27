@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const HiddenLayer = ({HiddenParamApply }) => {
+const HiddenLayer = ({HiddenParamApply, layerIndex }) => {
     const [hiddenSize, setHiddenSize] = useState('')
     const [hiddenAct, setHiddenAct] = useState('relu')
     
@@ -14,9 +14,9 @@ const HiddenLayer = ({HiddenParamApply }) => {
             <div className="flex flex-col gap-3">
                 <label
                     htmlFor="floating_hidden_size"
-                    className="text-lg text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:start-0 peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    className="text-[10px] text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:start-0 peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
-                    Hidden Layer Size
+                    Hidden Layer { layerIndex + 1}
                 </label>
                 <input
                     type="text"

@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 import {
   Carousel,
@@ -10,35 +10,10 @@ import {
 } from "@/components/ui/carousel"
 import CNN from './CNN'
 
-function SidebarCnn({selectedLayers, onSelectedLayers }) {
-
+function SidebarCnn({ selectedLayers, onSelectedLayers }) {
   return (
-    <div className="w-[19rem] min-h-screen border-r-[1px] border-gray-400 bg-gray-900">
-{/* 
-    <div className="border-b-[1px] border-gray-400">
-            <Carousel
-        opts={{
-            align: "start",
-        }}
-        className="w-[16rem] max-w-sm"
-        >
-      <CarouselContent  >
-        {NeuralNets.map((nn) => (
-          <CarouselItem key={nn} className="md:basis-1/2 lg:basis-1/3">
-            <div className="px-7 pt-7 pb-3">
-                <button className="text-white text-sm">
-                    {nn}
-                </button>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-        </Carousel>
-     </div> */}
-
-        
-     <CNN  selectedLayers={selectedLayers} onSelectedLayers={onSelectedLayers}/>
-
+    <div className="w-[19rem] min-h-screen border-r-[1px] pb-8 border-gray-400 bg-gray-900">
+      <CNN selectedLayers={selectedLayers} onSelectedLayers={onSelectedLayers} />
     </div>
   )
 }

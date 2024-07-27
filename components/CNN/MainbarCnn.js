@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 
 function MainbarCNN({ selectedLayers, removeLayer, addConvLayer }) {
-  const [expandedBlock, setExpandedBlock] = useState(null);
+    const [expandedBlockIndex, setExpandedBlockIndex] = useState(null);
 
-
-
-  const Blocks = ({ block }) => {
+  const Blocks = ({ block, index }) => {
     const [selectedOptions, setSelectOptions] = useState(false);
 
     const selectOptionToggle = () => {
@@ -14,11 +12,10 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer }) {
 
     const isConvBlock = block === "Conv Block";
     const expandBlock = () => {
-      if (isConvBlock) {
-        setExpandedBlock(expandedBlock === "Conv Block" ? null : "Conv Block");
-      }
+        if (isConvBlock) {
+            setExpandedBlockIndex(prev => prev === index ? null : index);
+        }
     };
-
     return (
       <div className="relative">
         <div
@@ -69,10 +66,10 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer }) {
             <div key={index} className="flex flex-col justify-center items-center relative">
             <div className=" relative">
 
-                <Blocks block={block === "Conv Layer" || block === "Activation Function" || block === "Pooling Layer" ? "Conv Block" : block} />
+                <Blocks block={block === "Conv Layer"  ? "Conv Block" : block} index={index} />
 
                 {
-                    expandedBlock === "Conv Block" && block === "Conv Layer" && (
+                    expandedBlockIndex === index && block === "Conv Layer" && (
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" className="w-[2.5rem] h-[2.0rem] absolute top-3 -right-11 ">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                         </svg>
@@ -81,7 +78,7 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer }) {
                 }
             </div>
 
-              {expandedBlock === "Conv Block" && block === "Conv Layer" && <ConvBlockExpanded />}
+              {expandedBlockIndex === index &&   <ConvBlockExpanded />}
 
               {index < selectedLayers.length - 1 && (
                 <svg className="w-8 h-8 my-2 mb-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

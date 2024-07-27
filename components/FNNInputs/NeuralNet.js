@@ -7,24 +7,53 @@ import RightSidebar from './RightSidebar'
 export default function NeuralNet() {
   const [selectedLayers, setSelectedLayers] = useState([]);
 
+  
   const onSelectedLayers = (layer) => {
     if (!selectedLayers.includes(layer)) {
-      setSelectedLayers((prev) => [...prev, layer]);
+      setSelectedLayers((prev) => {
+        // Check if the layer can be added based on the current structure
+        if (layer === "Input Layer" && prev.length === 0) {
+          return [...prev, layer];
+        } else if (layer === "Hidden Layer" && prev.includes("Input Layer") && !prev.includes("Output Layer")) {
+          return [...prev, layer];
+        } else if (layer === "Output Layer" && prev.includes("Input Layer") && !prev.includes("Output Layer")) {
+          return [...prev, layer];
+        } else if ((layer === "Optimizer" || layer === "Loss Function") && prev.includes("Output Layer")) {
+          return [...prev, layer];
+        } else {
+          // If the layer can't be added, return the previous state unchanged
+          console.log(`Cannot add ${layer} at this position`);
+          return prev;
+        }
+      });
     }
   };
 
-  const removeLayer = (layerToRemove) => {
-    setSelectedLayers((layers) => layers.filter(layer => layer !== layerToRemove));
-  };
+ 
 
+
+  const removeLayer = (layerToRemove) => {
+    setSelectedLayers((layers) => {
+      const index = layers.indexOf(layerToRemove);
+      if (index !== -1) {
+        if (layerToRemove === "Input Layer") {
+          return [];
+        }
+        else if (layerToRemove === "Output Layer") {
+          return layers.slice(0, index);
+        }
+        return layers.filter((_, i) => i !== index);
+      }
+      return layers;
+    });
+  };
+  
   const addHiddenLayer = () => {
     setSelectedLayers((layers) => {
       const lastHiddenLayerIndex = layers.lastIndexOf("Hidden Layer");
       if (lastHiddenLayerIndex === -1) {
-        // If there's no Hidden Layer, add it at the end
         return [...layers, "Hidden Layer"];
       } else {
-        // Insert the new Hidden Layer after the last existing one
         const newLayers = [...layers];
         newLayers.splice(lastHiddenLayerIndex + 1, 0, "Hidden Layer");
         return newLayers;
@@ -34,14 +63,13 @@ export default function NeuralNet() {
 
   const [FFNeuralnet, setFFNeuralNet] = useState({
     "inputLayerSize": 0,
-    "hiddenLayerSize": 0, 
-    "HiddenAct": "",
+    "hiddenLayers": [],
     "OutputlayerSize": 0,
     "OutputAct": "",
     "Optimizer" : "",
     "LossFunction" : ""
-
   })
+
 
   const InputParamApply = (inputs) => {
     setFFNeuralNet(prevState => ({
@@ -50,12 +78,15 @@ export default function NeuralNet() {
     }))
   }
 
-  const HiddenParamApply = (size, act) => {
-    setFFNeuralNet(prevState => ({
-      ...prevState,
-      hiddenLayerSize: size,
-      HiddenAct: act
-    }))
+  const HiddenParamApply = (index, size, act) => {
+    setFFNeuralNet(prevState => {
+      const newHiddenLayers = [...prevState.hiddenLayers];
+      newHiddenLayers[index] = { size, act };
+      return {
+        ...prevState,
+        hiddenLayers: newHiddenLayers
+      };
+    })
   }
 
   const OutputParamApply = (size, act) => {

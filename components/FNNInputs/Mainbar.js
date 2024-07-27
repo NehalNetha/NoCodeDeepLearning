@@ -3,19 +3,30 @@ import React, {useState} from 'react'
 
 function Mainbar({selectedLayers, removeLayer, addHiddenLayer}) {
 
+  
     const Blocks = ({block }) => {
 
         const [selectedOptions, setSelectOptions] = useState(false)
+
+        
+
 
         const selectOptionToggle = () => {
             setSelectOptions(prev => !prev)
         }
 
+        const handleClickAddButtonHidden = () => {
+            addHiddenLayer()
+        }
+
+
         return (
             <div className=" relative">
 
                 <div className="w-[16rem] h-[3.5rem] mb-5 py-5 px-2 border-[1px] border-gray-500 rounded-lg items-center flex flex-row justify-between ">
-                    <p className="text-white text-[16px] pl-4">{block}</p>
+                     <p className="text-white text-[16px] pl-4">
+                        {block}
+                    </p>
                     <button className="cursor-pointer" onClick={selectOptionToggle}>            
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
@@ -31,7 +42,7 @@ function Mainbar({selectedLayers, removeLayer, addHiddenLayer}) {
                             </svg>
                         </button>
                         {block === "Hidden Layer" && (
-                            <button onClick={addHiddenLayer} >
+                            <button onClick={handleClickAddButtonHidden }    >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="green" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
@@ -89,3 +100,4 @@ function Mainbar({selectedLayers, removeLayer, addHiddenLayer}) {
 }
 
 export default Mainbar
+
