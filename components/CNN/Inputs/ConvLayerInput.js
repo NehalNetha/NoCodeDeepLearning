@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-const ConvLayerInput = ({ActivationParamApply, PoolingParamApply,  ConvParamApply, dropdownState }) => {
+const ConvLayerInput = ({ActivationParamApply, PoolingParamApply,  ConvParamApply,  }) => {
+  
   const [convParams, setConvParams] = useState({
     filters: '',
     kernelSize: '',
@@ -114,7 +115,7 @@ const ConvLayerInput = ({ActivationParamApply, PoolingParamApply,  ConvParamAppl
         onClick={toggleDropdown}
       >
         Convolutional Layer Parameters
-        {isOpen  || dropdownState.isOpen === true ? <ChevronUp /> : <ChevronDown />}
+        {isOpen   === true ? <ChevronUp /> : <ChevronDown />}
       </button>
 
       <button
@@ -135,7 +136,7 @@ const ConvLayerInput = ({ActivationParamApply, PoolingParamApply,  ConvParamAppl
         {isOpenPooling ? <ChevronUp /> : <ChevronDown />}
       </button>
 
-      {isOpen && (
+      {isOpen  &&(
         <form className="w-[18rem] px-5 mt-[1rem] flex flex-col gap-8">
           <div className="flex flex-col gap-6">
             {Object.entries(convParams).map(([key, value]) => (

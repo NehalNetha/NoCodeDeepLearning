@@ -22,9 +22,39 @@ export default function Home() {
     setSelectedNN(nn)
   }
 
+  const [CNNModel, setCNNModel] = useState({
+    inputLayer: { 
+      width: 0,
+      height: 0,
+      channels: 0,
+      batchSize: 0
+    },
+    convLayers: [],
+    activationLayers: [],
+    poolingLayers: [
+      {
+      kernelSize: 0,
+      stride: 0,
+      padding: 0
+      }
+
+    ],
+    FullyConnectedLayer: [],
+    outputLayer: { units: 0, activation: "" },
+    optimizer: "",
+    lossFunction: "",
+    learning_rate : 0,
+    modelConf : {
+      learningRate : 0,
+      epochs: 0
+    }
+  });
+
+  
+
   return (
     <main className="bg-gray-900 w-full min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar CNNModel={CNNModel} />
 
       <div className="w-full py-4 border-b border-gray-400">
         <Carousel
@@ -57,7 +87,7 @@ export default function Home() {
 
       <div className="flex-grow overflow-auto">
         {selectedNN == "FNN" && <NeuralNet />}
-        {selectedNN == "CNN" && <NeuralNetCNN/>}
+        {selectedNN == "CNN" && <NeuralNetCNN CNNModel={CNNModel} setCNNModel={setCNNModel}/>}
       </div>
     </main>
   );

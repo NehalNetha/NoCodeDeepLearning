@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 
 const FullyConnectedLayer = ({ FullyConnectedLayerParamApply, layerIndex }) => {
-  const [inFeatures, setInFeatures] = useState('');
-  const [outFeatures, setOutFeatures] = useState('');
+  const [units, setUnits] = useState('');
+
   const [bias, setBias] = useState(false);
+  const [activation, setActivation] = useState('relu')
 
   const handleApply = () => {
     FullyConnectedLayerParamApply(
-      parseInt(inFeatures),
-      parseInt(outFeatures),
+      parseInt(units),
+      activation,
       bias
     );
   };
@@ -23,38 +24,40 @@ const FullyConnectedLayer = ({ FullyConnectedLayerParamApply, layerIndex }) => {
             htmlFor="inFeatures"
             className="text-md text-gray-300"
           >
-            In Features 
-          </label>
-          <input
-            type="inFeatures"
-            name="width"
-            id="inFeatures"
-            className="block py-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-gray-600"
-            placeholder=" "
-            required
-            value={inFeatures}
-            onChange={(e) => setInFeatures(e.target.value)}
-          />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label
-            htmlFor="OutFeatures"
-            className="text-md text-gray-300"
-          >
-            Out Features 
+            Units 
           </label>
           <input
             type="text"
-            name="OutFeatures"
-            id="OutFeatures"
+            name="width"
+            id="units"
             className="block py-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-gray-600"
             placeholder=" "
             required
-            value={outFeatures}
-            onChange={(e) => setOutFeatures(e.target.value)}
+            value={units}
+            onChange={(e) => setUnits(e.target.value)}
           />
         </div>
+
+        <div>
+          <label htmlFor="activation" className="text-[10px] text-gray-300">
+              Activation Function
+            </label>
+            <select
+              name="activation"
+              id="activation"
+              value={activation}
+              onChange={(e) => setActivation(e.target.value)}
+              className="block py-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-gray-600"
+            >
+              <option value="relu">ReLU</option>
+              <option value="sigmoid">Sigmoid</option>
+              <option value="tanh">Tanh</option>
+              <option value="softmax">Softmax</option>
+            </select>
+           
+          </div>
+
+    
 
         <div  className="flex items-center gap-2">
             <input

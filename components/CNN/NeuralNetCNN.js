@@ -4,25 +4,11 @@ import SidebarCnn from './SidebarCnn'
 import MainbarCNN from './MainbarCnn'
 import RightBarCnn from './RightBarCnn';
 
-export default function NeuralNetCNN() {
+export default function NeuralNetCNN({CNNModel, setCNNModel}) {
   const [selectedLayers, setSelectedLayers] = useState([]);
 
- 
-  const [CNNModel, setCNNModel] = useState({
-    inputLayer: { 
-      width: 0,
-      height: 0,
-      channels: 0,
-      batchSize: 0
-    },
-    convLayers: [],
-    activationLayers: [],
-    poolingLayers: [],
-    FullyConnectedLayer: [],
-    outputLayer: { units: 0, activation: "" },
-    optimizer: "",
-    lossFunction: ""
-  });
+
+  
 
   const onSelectedLayers = (layer) => {
     if (!selectedLayers.includes(layer)) {
@@ -134,10 +120,10 @@ export default function NeuralNetCNN() {
   };
 
 
-  const FullyConnectedLayerParamApply = (in_features, out_features, bias) => {
+  const FullyConnectedLayerParamApply = (units, activation,  bias) => {
     setCNNModel(prevState => {
       const newConnectedLayers = [...prevState.FullyConnectedLayer];
-      newConnectedLayers.push({ in_features, out_features, bias });
+      newConnectedLayers.push({units, activation, bias });
       return {
         ...prevState,
         FullyConnectedLayer: newConnectedLayers
@@ -145,7 +131,7 @@ export default function NeuralNetCNN() {
     });
   };
 
-  const OutputParamApply = (units, activation) => {
+  const OutputParamsApply = (units, activation) => {
     setCNNModel(prevModel => ({
       ...prevModel,
       outputLayer: { units, activation }
@@ -165,29 +151,59 @@ export default function NeuralNetCNN() {
       lossFunction
     }));
   };
+  const ModelConfParamsApply = (learningRate, epochs) => {
+    setCNNModel(prevModel => ({
+      ...prevModel,
+      modelConf: { learningRate, epochs }
+    }));
+  };
+
 
   useEffect(() => {
     console.log(CNNModel);
+    console.log('dropdownInputApply:', dropdownInputApply);
   }, [CNNModel]);
 
 
-  //conv layer state press
-  const [dropdownStateConv, setDropdownStateConv] = useState({
-    isOpen: false,
-    isOpenActivation: false,
-    isOpenPooling: false
-  });
+
+
   
-  const toggleDropdownConv = (type) => {
-    setDropdownStateConv(prevState => ({
-      isOpen: type === 'dropdown' ? !prevState.isOpen : false,
-      isOpenActivation: type === 'activation' ? !prevState.isOpenActivation : false,
-      isOpenPooling: type === 'pooling' ? !prevState.isOpenPooling : false
-    }));
+  const [dropdownInputApply, setDropDownInputApply] = useState(false)
 
-    console.log(dropdownStateConv)
-  };
+  // toggling fully connected layer
+  const [dropDownFCN, setDropDownFCN] = useState(false)
+  const [dropDownCNNBlock, setDropDownCNNBlock] = useState(false)
+  const [dropDownOutput, setDropDownOutput] = useState(false)
 
+  const toggleDropdownInputApply = () =>{
+    setDropDownInputApply(!dropdownInputApply)
+    setDropDownFCN(false)
+    setDropDownCNNBlock(false)
+    
+  }
+
+
+  const toggleDropDownFCN = () => {
+    setDropDownFCN(!dropDownFCN)
+    setDropDownInputApply(false)
+    setDropDownCNNBlock(false)
+  }
+
+
+  const toggleCNNBlock = () => {
+    setDropDownCNNBlock(!dropDownCNNBlock)
+    setDropDownInputApply(false)
+    setDropDownFCN(false)
+  }
+
+  const toggleDropDownOutput = () => {
+    setDropDownOutput(!dropDownOutput)
+    setDropDownCNNBlock(false)
+    setDropDownInputApply(false)
+    setDropDownFCN(false)
+  }
+
+ 
   return (
     <div className="flex flex-row min-h-screen">
       <SidebarCnn onSelectedLayers={onSelectedLayers} selectedLayers={selectedLayers} />
@@ -195,9 +211,13 @@ export default function NeuralNetCNN() {
       selectedLayers={selectedLayers} 
       removeLayer={removeLayer} 
       addConvLayer={addConvLayer} 
-      toggleDropdownConv = {toggleDropdownConv}
       addFullyConnectedLayer = {addFullyConnectedLayer}
-      
+      dropdownInputApply={dropdownInputApply}
+      toggleDropdownInputApply={toggleDropdownInputApply}
+      toggleDropDownFCN={toggleDropDownFCN}
+      dropDownFCN={dropDownFCN}
+      toggleCNNBlock={toggleCNNBlock}
+      toggleDropDownOutput={toggleDropDownOutput}
       />
       <RightBarCnn 
         selectedLayers={selectedLayers}
@@ -205,12 +225,17 @@ export default function NeuralNetCNN() {
         ConvParamApply={ConvParamApply}
         PoolingParamApply={PoolingParamApply}
         FullyConnectedLayerParamApply={FullyConnectedLayerParamApply}
-        OutputParamApply={OutputParamApply}
+        OutputParamsApply={OutputParamsApply}
         OptimizerParamApply={OptimizerParamApply}
         LossFunctionParamApply={LossFunctionParamApply}
-        dropdownState = {dropdownStateConv}
-        toggleDropdownConv = {toggleDropdownConv}
         ActivationParamApply = {ActivationParamApply}
+        ModelConfParamsApply = {ModelConfParamsApply}
+        dropdownInputApply={dropdownInputApply}
+        dropDownFCN={dropDownFCN}
+        dropDownCNNBlock={dropDownCNNBlock}
+        dropDownOutput={dropDownOutput}
+        
+        
       />
     </div>
   )

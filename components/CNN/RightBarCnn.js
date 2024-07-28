@@ -10,9 +10,26 @@ import InputLayerCNN from './Inputs/InputLayerCnn';
 import ConvLayerCNN from './Inputs/ConvLayerInput';
 import ConvLayerInput from './Inputs/ConvLayerInput';
 import FullyConnectedLayer from './Inputs/FullyConnectedLayer';
+import OutputLayerCNN from './Inputs/OutputLayerCNN';
 
 
-function RightBarCnn({selectedLayers, InputParamApply, ConvParamApply, dropdownState, FullyConnectedLayerParamApply, ActivationParamApply , PoolingParamApply}) {
+function RightBarCnn({
+  selectedLayers,
+  InputParamApply, 
+  ConvParamApply, 
+  dropdownState, 
+  FullyConnectedLayerParamApply, 
+  ActivationParamApply , 
+  PoolingParamApply,
+  OutputParamsApply,
+  OptimizerParamApply,
+  LossFunctionParamApply,
+  ModelConfParamsApply,
+  dropdownInputApply,
+  dropDownFCN,
+  dropDownCNNBlock,
+  dropDownOutput
+}) {
 
 
    
@@ -63,16 +80,23 @@ function RightBarCnn({selectedLayers, InputParamApply, ConvParamApply, dropdownS
         </div>
 
         <div>
-          {activeApply === "Input Layer" && <InputLayerCNN InputParamApply={InputParamApply} />}
-          {activeApply === "Conv Layer" && <ConvLayerInput ConvParamApply={ConvParamApply}  dropdownState={dropdownState} ActivationParamApply={ActivationParamApply} PoolingParamApply={PoolingParamApply}/>}
+          {activeApply === "Input Layer"  || dropdownInputApply && <InputLayerCNN InputParamApply={InputParamApply}  />}
+          {activeApply === "Conv Layer" || dropDownCNNBlock && <ConvLayerInput ConvParamApply={ConvParamApply}  dropdownState={dropdownState} ActivationParamApply={ActivationParamApply} PoolingParamApply={PoolingParamApply}/>}
           {activeApply === "Fully Connected Layer" && <FullyConnectedLayer />}
 
-          {activeApply && activeApply.startsWith('Fully Connected Layer') && (
+          {activeApply && activeApply.startsWith('Fully Connected Layer') || dropDownFCN &&  (
             <FullyConnectedLayer
               FullyConnectedLayerParamApply={( in_features, out_features, bias) => FullyConnectedLayerParamApply(in_features, out_features, bias)}
               layerIndex={activeFCN}
             />
           )}
+         {activeApply === "Output Layer" || dropDownOutput&& <OutputLayerCNN 
+          OutputParamsApply={OutputParamsApply}
+          OptimizerParamApply= {OptimizerParamApply}
+          LossFunctionParamApply ={LossFunctionParamApply}
+          ModelConfParamsApply ={ModelConfParamsApply}
+          />}
+
         </div>
 
     </div>

@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 
-function MainbarCNN({ selectedLayers, removeLayer, addConvLayer, toggleDropdownConv, addFullyConnectedLayer }) {
+function MainbarCNN({
+   selectedLayers, 
+   removeLayer, 
+   addConvLayer, 
+   addFullyConnectedLayer, 
+   toggleDropdownInputApply, 
+   toggleDropDownFCN,
+   toggleCNNBlock,
+   toggleDropDownOutput
+   }) {
     const [expandedBlockIndex, setExpandedBlockIndex] = useState(null);
 
-  const Blocks = ({ block, index }) => {
+  const Blocks = ({ block, index, toggleDropdownInputApply, toggleDropDownFCN , toggleCNNBlock}) => {
     const [selectedOptions, setSelectOptions] = useState(false);
 
     const selectOptionToggle = () => {
@@ -25,8 +34,18 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer, toggleDropdownC
           className="w-[16rem] h-[3.5rem] mb-5 py-5 px-2 border-[1px] border-gray-500 rounded-lg items-center flex flex-row justify-between cursor-pointer"
           onClick={() => {
             expandBlock();
-            if (block === "Conv Layer") {
-              toggleDropdownConv(block);
+          
+            if (block === "Input Layer"){
+              toggleDropdownInputApply()
+            }
+            if (block == "Fully Connected Layer"){
+              toggleDropDownFCN()
+            }
+            if (block == "Conv Block"){
+              toggleCNNBlock()
+            }
+            if (block == "Output Layer"){
+              toggleDropDownOutput()
             }
           }}
         >
@@ -82,7 +101,12 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer, toggleDropdownC
             <div key={index} className="flex flex-col justify-center items-center relative">
             <div className=" relative">
 
-                <Blocks block={block === "Conv Layer"  ? "Conv Block" : block} index={index} />
+                <Blocks block={block === "Conv Layer"  ? "Conv Block" : block} index={index} 
+                 toggleDropdownInputApply={toggleDropdownInputApply}
+                 toggleDropDownFCN ={toggleDropDownFCN}
+                 toggleCNNBlock={toggleCNNBlock}
+                 toggleDropDownOutput={toggleDropDownOutput}
+                  />
 
                 {
                     expandedBlockIndex === index && block === "Conv Layer" && (
@@ -94,7 +118,7 @@ function MainbarCNN({ selectedLayers, removeLayer, addConvLayer, toggleDropdownC
                 }
             </div>
 
-              {expandedBlockIndex === index &&   <ConvBlockExpanded block= {block} toggleDropdownConv={toggleDropdownConv}  />}
+              {expandedBlockIndex === index &&   <ConvBlockExpanded block= {block}  />}
 
               {index < selectedLayers.length - 1 && (
                 <svg className="w-8 h-8 my-2 mb-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
