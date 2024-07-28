@@ -19,13 +19,13 @@ def hello_world():
 def get_neuralnet():
    return FnnNueralNet()
     
-
-@app.route('/download-neural-net/<config_id>', methods=['GET'])
-def download_neural_net(config_id):
-    return FnnDownloadFile(config_id)
-
-
-# Functions for CNN Architecture
+@app.route("/download-conv-neuralnet/<config_id>", methods=["GET"])
+def download_cnn(config_id):
+    try:
+        return download_cnn_file(config_id)
+    except Exception as e:
+        app.logger.error(f"Error in download_cnn: {str(e)}")
+        return jsonify({"error": str(e)}), 500
     
 @app.route("/get-conv-neuralnet", methods=['POST'])
 def get_conv_neuralnet():

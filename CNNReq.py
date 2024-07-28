@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_file
 import uuid
 import io
 import textwrap
+from PytorchCnnGen import pytorch_gen_file
 
 cnn_configs = {}
 def get_convolutional_neural_net():
@@ -10,7 +11,8 @@ def get_convolutional_neural_net():
         
         required_keys = [
             "inputLayer", "convLayers", "activationLayers", "poolingLayers",
-            "FullyConnectedLayer", "outputLayer", "optimizer", "lossFunction"
+            "FullyConnectedLayer", "outputLayer", "optimizer", "lossFunction",
+            "modelConf"
         ]
         
         if not all(key in data for key in required_keys):
@@ -61,98 +63,4 @@ def download_cnn_file(config_id):
         mimetype='text/x-python'
     )
     
-
-def pytorch_gen_file(config):
-    code = f"""
-import torch
-import torch.nn as nn
-import torch.optim as optim
-
-class DynamicCNN(nn.Module):
-    def __init__(self):
-        super(DynamicCNN, self).__init__()
-        self.layers = nn.ModuleList()
-        
-        # Input layer
-        in_channels = {config['inputLayer']['channels']}
-        
-        # Convolutional layers
-        {generate_conv_layers(config)}
-        
-        # Calculate the size of the flattened feature map
-        with torch.no_grad():
-            x = torch.randn(1, {config['inputLayer']['channels']}, 
-                            {config['inputLayer']['height']}, 
-                            {config['inputLayer']['width']})
-            for layer in self.layers:
-                x = layer(x)
-            flattened_size = x.view(1, -1).size(1)
-        
-        # Fully connected layers
-        {generate_fc_layers(config)}
-        
-        # Output layer
-        self.layers.append(nn.Linear(flattened_size, {config['outputLayer']['units']}))
-        self.layers.append(self.get_activation('{config['outputLayer']['activation']}'))
-
-    def forward(self, x):
-        for layer in self.layers:
-            x = layer(x)
-        return x
-
-    @staticmethod
-    def get_activation(name):
-        if name.lower() == 'relu':
-            return nn.ReLU()
-        elif name.lower() == 'softmax':
-            return nn.Softmax(dim=1)
-        else:
-            raise ValueError(f"Unsupported activation function: {{name}}")
-
-def create_model_from_config():
-    model = DynamicCNN()
-    
-    # Set up optimizer
-    optimizer = optim.{config['optimizer'].capitalize()}(model.parameters())
-    
-    # Set up loss function
-    criterion = nn.CrossEntropyLoss()
-    
-    return model, optimizer, criterion
-
-def main():
-    model, optimizer, criterion = create_model_from_config()
-    
-    print(model)
-    print(f"Optimizer: {{optimizer}}")
-    print(f"Loss function: {{criterion}}")
-
-if __name__ == "__main__":
-    main()
-"""
-    return textwrap.dedent(code)
-
-def generate_conv_layers(config):
-    conv_code = ""
-    for i, (conv, act, pool) in enumerate(zip(config['convLayers'], config['activationLayers'], config['poolingLayers'])):
-        conv_code += f"""
-        self.layers.append(nn.Conv2d(in_channels, {conv['filters']}, {conv['kernelSize']}, 
-                                     stride={conv['stride']}, padding='{conv['padding']}'))
-        self.layers.append(self.get_activation('{act}'))
-        self.layers.append(nn.MaxPool2d({pool['poolSize']}, stride={pool['stride']}))
-        in_channels = {conv['filters']}
-        """
-    return textwrap.dedent(conv_code)
-
-def generate_fc_layers(config):
-    fc_code = ""
-    for fc in config['FullyConnectedLayer']:
-        fc_code += f"""
-        self.layers.append(nn.Linear(flattened_size, {fc['units']}))
-        self.layers.append(self.get_activation('{fc['activation']}'))
-        flattened_size = {fc['units']}
-        """
-    return textwrap.dedent(fc_code)
-
-
 
