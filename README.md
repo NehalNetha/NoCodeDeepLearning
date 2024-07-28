@@ -50,3 +50,19 @@ Creating deep learning architectures can be challenging, and writing boilerplate
     </td>
   </tr>
 </table>
+
+
+## To run locally
+
+Clone the Repo
+
+#### Frontend
+
+```
+cd NoCodeDeepLearning
+npm i
+npm run dev
+```
+
+
+
