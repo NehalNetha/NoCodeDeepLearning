@@ -19,6 +19,13 @@ Creating deep learning architectures can be challenging, and writing boilerplate
 - **Day One**: Built the UI, implemented architecture design blocks, and created a Flask API for downloading FNN PyTorch files.
 - **Day Two**: Focused on designing CNN architectures, improving dynamic PyTorch file generation, and added RNN support.
 
+
+## How it Works
+
+- Using NextJs, We the users building blocks of any architecture to drop and design the architecture
+- Then the user can add the hyper parameters of the the layers, model configurations
+- We take the blocks and the data, and send it to the Flask Api, to dynamically generate python file to download
+
 ## Demo Video
 
 [![Demo Video](https://github.com/user-attachments/assets/44f164c3-0bfe-42cd-ba19-583ed3f0d3af)](https://youtu.be/PJeJ_SJCfiU)
