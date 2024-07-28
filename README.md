@@ -1,46 +1,45 @@
-# No Code Deep Leaning Visual Editor
+# No Code Deep Learning Visual Editor
 
+Creating deep learning architectures can be challenging, and writing boilerplate code from scratch adds to the difficulty. That's why we've developed a no-code deep learning tool that allows you to design deep learning architectures, set custom hyperparameters, and download the corresponding PyTorch file at the end.
 
-Making Deep learning architectures can be difficult, writing the same boiler plate code from scratch can be more difficult than that. That's why we created a no-code deep learning tool, that lets you create deep learning architectures, with custom hyper parameters, and lets you downlaod the Pytorch file with the architecture you designed at the end.
+## Features That Work
 
+- **Architecture Design**: Create architectures for Feed Forward Neural Networks (FNN), Convolutional Neural Networks (CNN), and Recurrent Neural Networks (RNN).
+- **PyTorch File Download**: Download the PyTorch file after designing the architecture.
 
+## Planned Features
 
+- **Additional Architectures**: Support for Transformers, GANs, LSTMs, and more.
+- **Data Transformations**: Ability to design and apply custom data transformations.
+- **Enhanced UI**: Improved drag-and-drop functionality for a better user experience.
+- **Robust PyTorch Files**: More robust and feature-rich PyTorch file generation.
 
-### Features That Work
+## Timeline
 
-1.⁠ ⁠Creating architectures in Feed Forward Neural Networks, Convolutional Neural Networks, and Recurrent Neural Networks
-2.⁠ ⁠Getting the Pytorch file back after designing the architectures.
+- **Day One**: Built the UI, implemented architecture design blocks, and created a Flask API for downloading FNN PyTorch files.
+- **Day Two**: Focused on designing CNN architectures, improving dynamic PyTorch file generation, and added RNN support.
 
+## Demo Video
 
-### More Features in the Future
+[![Demo Video](https://github.com/user-attachments/assets/44f164c3-0bfe-42cd-ba19-583ed3f0d3af)](https://youtu.be/PJeJ_SJCfiU)
 
-1.⁠ ⁠Enabling to add more Architectures - Transformers, GANS, LSTMs.
-2.⁠ ⁠Letting the User design the Data Transformations they want to Apply
-3.⁠ ⁠Better UI - Drag and Dropping.
-4.⁠ ⁠More Robust Design of Pytorch Files.
-
-### TimeLine
-
-1. Day one - Built the UI, ability to design the architecture the block, Desinged Flask API to donwload FNN pytorch file
-2. Day Two - Focused on building to design CNN architecture, built better dynamic pytorch files, added RNN
-
-
-### Demo Video
-
-[<img width="1438" alt="Screenshot 2024-07-28 at 7 10 42 PM" src="https://github.com/user-attachments/assets/44f164c3-0bfe-42cd-ba19-583ed3f0d3af">
-]https://youtu.be/PJeJ_SJCfiU
-
-### Built By
+## Built By
 
 <table>
   <tr>
-
-<td align="center"><a href="https://github.com/NehalNetha"><img src="https://avatars.githubusercontent.com/u/84872197?v=4" width="180px;" alt=""/><br /><sub><b>NehalNetha</b></sub></a><br />
-
-  <td align="center"><a href="https://github.com/KhushinVyas"><img src="https://avatars.githubusercontent.com/u/120413040?v=4" width="180px;" alt=""/><br /><sub><b>Khushin Vyas</b></sub></a><br />
-
-
-</tr>
+    <td align="center">
+      <a href="https://github.com/NehalNetha">
+        <img src="https://avatars.githubusercontent.com/u/84872197?v=4" width="180px;" alt="Nehal Netha"/>
+        <br />
+        <sub><b>Nehal Netha</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/KhushinVyas">
+        <img src="https://avatars.githubusercontent.com/u/120413040?v=4" width="180px;" alt="Khushin Vyas"/>
+        <br />
+        <sub><b>Khushin Vyas</b></sub>
+      </a>
+    </td>
+  </tr>
 </table>
-
-
